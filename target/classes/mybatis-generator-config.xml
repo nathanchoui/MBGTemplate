@@ -4,44 +4,47 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />
+    <!-- defaultModelType:
+         1、conditional:默认e值，如果一个表的主键只有一个字段，则不会生成该主键，并合并到基本实体类中。
+         2、flat:一个表一个实体。
+         3、hierarchical:如果有主键则
+    -->
+    <context id="MySql"
+             targetRuntime="MyBatis3"
+             defaultModelType="conditional">
 
-    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="addRemarkComments" value="true"/>
+        </commentGenerator>
+
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/product?serverTimezone=UTC"
-                        userId="nathan"
-                        password="zw123456">
+                        userId="developer"
+                        password="dev123456">
         </jdbcConnection>
 
-        <javaTypeResolver >
-            <property name="forceBigDecimals" value="false" />
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="personal.nathan.do"
-                            targetProject="\MBGTemplate\src\main\java">
-            <property name="enableSubPackages" value="true" />
-            <property name="trimStrings" value="true" />
+        <javaModelGenerator targetPackage="personal.nathan.model.dataObject"
+                            targetProject="src\main\java">
+            <property name="trimStrings" value="true"/>
+            <property name="rootClass" value="personal.nathan.model.dataObject.BaseEntity"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="personal.nathan.mapper"
-                         targetProject="\MBGTemplate\src\main\resources\mapper">
-            <property name="enableSubPackages" value="true" />
-        </sqlMapGenerator>
+        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="src\main\resources"/>
 
-        <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="personal.nathan.dao"
-                             targetProject="\MBGTemplate\src\main\java">
-            <property name="enableSubPackages" value="true" />
-        </javaClientGenerator>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="personal.nathan.dao" targetProject="src\main\java"/>
 
-        <!-- 需要生成的实体类对应的表名，多个实体类复制多份该配置即可 -->
-        <table tableName="country"
-               domainObjectName="country"
-               enableCountByExample="false"
-               enableUpdateByExample="false"
-               enableDeleteByExample="false"
-               enableSelectByExample="false"
-               selectByExampleQueryId="false">
+        <table tableName="%" schema="product">
+            <generatedKey column="id" sqlStatement="MySql"/>
         </table>
 
     </context>
